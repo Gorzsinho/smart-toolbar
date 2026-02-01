@@ -1,27 +1,14 @@
 import { injectable } from '@theia/core/shared/inversify';
 import { Emitter, Event } from '@theia/core/lib/common/event';
-
-export interface Target {
-    id: string;
-    label: string;
-}
+import { Target } from './target-providers';
 
 @injectable()
 export class TargetStateStore {
 
-    // =========================
-    // STATE
-    // =========================
-
     private targets: Target[] = [];
     private currentTargetId?: string;
 
-    /** Targetenkénti connected állapot */
     private connectedByTarget = new Map<string, boolean>();
-
-    // =========================
-    // EVENTS
-    // =========================
 
     private readonly targetsEmitter = new Emitter<ReadonlyArray<Target>>();
     readonly onDidChangeTargets: Event<ReadonlyArray<Target>> =
@@ -36,10 +23,6 @@ export class TargetStateStore {
         Event<{ targetId: string; connected: boolean }> =
         this.connectionEmitter.event;
 
-    // =========================
-    // TARGETS
-    // =========================
-
     getTargets(): ReadonlyArray<Target> {
         return this.targets;
     }
@@ -53,16 +36,12 @@ export class TargetStateStore {
         this.targets = [...targets];
         this.targetsEmitter.fire(this.targets);
 
-        // Ha a current target érvénytelen lett, állítsunk be egy defaultot
+        // If the current target became invalid, set a default one
         if (this.currentTargetId &&
             !this.targets.some(t => t.id === this.currentTargetId)) {
             this.setCurrentTargetId(this.targets[0]?.id);
         }
     }
-
-    // =========================
-    // CURRENT TARGET
-    // =========================
 
     getCurrentTargetId(): string | undefined {
         return this.currentTargetId;
@@ -76,10 +55,6 @@ export class TargetStateStore {
         this.currentTargetId = id;
         this.currentTargetEmitter.fire(this.currentTargetId);
     }
-
-    // =========================
-    // CONNECTION STATE
-    // =========================
 
     isConnectedForCurrentTarget(): boolean {
         const id = this.currentTargetId;
@@ -111,16 +86,12 @@ export class TargetStateStore {
         this.connectionEmitter.fire({ targetId, connected });
     }
 
-    // =========================
-    // HELPERS
-    // =========================
-
     private sameTargets(a: ReadonlyArray<Target>, b: ReadonlyArray<Target>): boolean {
         if (a.length !== b.length) {
             return false;
         }
         for (let i = 0; i < a.length; i++) {
-            if (a[i].id !== b[i].id || a[i].label !== b[i].label) {
+            if (a[i].id !== b[i].id) {
                 return false;
             }
         }

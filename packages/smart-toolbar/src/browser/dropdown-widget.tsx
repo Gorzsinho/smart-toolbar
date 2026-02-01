@@ -1,11 +1,18 @@
-// DropdownView.tsx
 import * as React from 'react';
-import { DropdownService, DropdownItem } from './dropdown-api';
+import { DropdownIdProvider, DropdownLabelProvider, DropdownService } from './smart-toolbar-api';
 
-export function DropdownWidget(props: { service: DropdownService }) {
-    const { service } = props;
-    const [items, setItems] = React.useState<DropdownItem[]>([]);
-    const [selection, setSelection] = React.useState<DropdownItem | undefined>(undefined);
+type Props = {
+    service: DropdownService;
+    idProvider: DropdownIdProvider;
+    labelProvider: DropdownLabelProvider;
+    placeholder?: string;
+};
+
+export function DropdownWidget(props: Props): React.ReactElement {
+    const { service, idProvider, labelProvider } = props;
+
+    const [items, setItems] = React.useState<ReadonlyArray<unknown>>([]);
+    const [selectionId, setSelectionId] = React.useState<string>('');
 
     React.useEffect(() => {
         let disposed = false;
@@ -14,32 +21,39 @@ export function DropdownWidget(props: { service: DropdownService }) {
             const it = await service.getItems();
             const sel = await service.getSelection();
             if (!disposed) {
-                setItems([...it]);
-                setSelection(sel);
+                setItems(it);
+                setSelectionId(sel ? idProvider.getId(sel) : '');
             }
         })();
 
-        const disposeSelection = service.onDidChangeSelection(sel => setSelection(sel));
-
-        // ha van onDidChangeItems evented is:
-        // const disposeItems = service.onDidChangeItems(it => setItems([...it]));
+        const disposable = service.onDidChangeSelection(sel => {
+            setSelectionId(sel ? idProvider.getId(sel) : '');
+        });
 
         return () => {
             disposed = true;
-            disposeSelection.dispose();
-            // disposeItems.dispose();
+            disposable.dispose();
         };
-    }, [service]);
+    }, [service, idProvider]);
 
     return (
         <select
-            value={selection?.id ?? ''}
-            onChange={e => service.setSelection(e.currentTarget.value || undefined)}
+            value={selectionId}
+            onChange={e => {
+                const id = e.currentTarget.value || undefined;
+                setSelectionId(e.currentTarget.value);
+                void service.setSelectionById(id);
+            }}
+            className="smart-toolbar-dropdown"
         >
-            <option value="">-- válassz --</option>
-            {items.map(i => (
-                <option key={i.id} value={i.id}>{i.label}</option>
-            ))}
+            {items.map(item => {
+                const id = idProvider.getId(item);
+                return (
+                    <option key={id} value={id}>
+                        {labelProvider.getLabel(item)}
+                    </option>
+                );
+            })}
         </select>
     );
 }

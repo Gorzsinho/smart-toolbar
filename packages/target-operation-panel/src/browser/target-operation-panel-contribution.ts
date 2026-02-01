@@ -1,10 +1,11 @@
 import { CommandContribution, CommandRegistry, MenuContribution, MenuModelRegistry } from '@theia/core';
 import { inject, injectable } from '@theia/core/shared/inversify';
 import { ToolbarContribution, ToolbarItemRegistry } from 'smart-toolbar/lib/browser/toolbar-contribution';
-import { SmartToolbarMenus } from 'smart-toolbar/lib/browser/smart-toolbar-menus';
-import { SMART_TOOLBAR_ID } from 'smart-toolbar/lib/browser/dropdown-api';
+import { SmartToolbarMenus } from 'smart-toolbar/lib/browser/smart-toolbar-api';
 import { ApplicationShell, BoxLayout, FrontendApplication, Panel, Widget, WidgetManager } from '@theia/core/lib/browser';
 import { TargetStateStore } from './target-state-store';
+import { SMART_TOOLBAR_ID } from 'smart-toolbar/lib/browser/smart-toolbar-api';
+import './style/strip-panel.css';
 
 const TargetCommands = {
     CONNECT: {
@@ -38,33 +39,26 @@ export class TargetOperationPanelContribution implements CommandContribution, To
         await this.addTargetOperationPanel(app.shell);
 
         this.targetStateStore.setTargets([
-            { id: 'dev', label: 'Development' },
-            { id: 'test', label: 'Test' },
-            { id: 'prod', label: 'Production' }
+            { id: 'dev', configuration: 'Development', resource: 'Local' },
+            { id: 'test', configuration: 'Test', resource: 'Local' },
+            { id: 'prod', configuration: 'Production', resource: 'Local' }
         ]);
         this.targetStateStore.setCurrentTargetId('dev');
     }
 
     protected async addTargetOperationPanel(shell: ApplicationShell): Promise<void> {
-        const white = await this.widgetManager.getOrCreateWidget(SMART_TOOLBAR_ID);
+        const smartToolbar = await this.widgetManager.getOrCreateWidget(SMART_TOOLBAR_ID);
 
-        // 1) Strip panel (Lumino), ebbe tesszük bele a Theia/React widgetet
+        // 1) Create a strip panel (Lumino) and place the Theia/React widget inside it
         const strip = new Panel();
-        strip.id = 'white-strip-panel';
-        strip.addClass('white-strip-panel');
+        strip.id = 'strip-panel';
+        strip.addClass('strip-panel');
 
-        // Fix magasság: a strip panel maga legyen 40px magas
-        strip.node.style.height = '40px';
-        strip.node.style.minHeight = '40px';
-        strip.node.style.width = '100%';
-        strip.node.style.background = '#fff';
-        strip.node.style.borderBottom = '1px solid #ddd';
+        // Make the smart toolbar fill the strip
+        smartToolbar.node.style.width = '100%';
+        strip.addWidget(smartToolbar);
 
-        // A white widget töltse ki a stripet
-        white.node.style.width = '100%';
-        strip.addWidget(white);
-
-        // 2) Beszúrás a shell BoxLayoutjába a topPanel után
+        // 2) Insert into the shell BoxLayout right after the topPanel
         const layout = shell.layout as BoxLayout | undefined;
         if (!layout) {
             console.warn('[SmartToolbar] shell.layout not found');
@@ -75,21 +69,21 @@ export class TargetOperationPanelContribution implements CommandContribution, To
         const topIndex = widgets.indexOf(shell.topPanel);
 
         if (topIndex < 0) {
-            console.warn('[WhitePanel] topPanel not found in shell BoxLayout.widgets');
+            console.warn('[StripPanel] topPanel not found in shell BoxLayout.widgets');
             return;
         }
 
-        // Ha már benne van egyszer, ne szúrjuk be újra (pl. reload / layout restore eset)
+        // Avoid inserting the strip multiple times (e.g. reload / layout restore)
         if (widgets.includes(strip)) {
             return;
         }
 
-        // tényleges beszúrás
+        // Perform the actual insertion
         layout.insertWidget(topIndex + 1, strip);
 
         BoxLayout.setStretch(strip, 0);
 
-        // 4) Frissítés
+        // 4) Refresh
         strip.update();
         shell.update();
     }

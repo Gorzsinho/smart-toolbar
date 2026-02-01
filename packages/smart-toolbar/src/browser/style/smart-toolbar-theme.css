@@ -1,0 +1,230 @@
+/* ==============================
+   SMART TOOLBAR CONTAINER
+   ============================== */
+
+.smart-toolbar-widget {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.smart-toolbar-widget__content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Left: dropdown */
+.smart-toolbar-widget__left {
+    display: flex;
+    align-items: center;
+}
+
+/* Right: toolbar buttons */
+.smart-toolbar-widget__right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ==============================
+   DROPDOWN (VS CODE STYLE)
+   ============================== */
+
+.smart-toolbar-dropdown {
+    height: 26px;
+    min-width: 240px;
+
+    padding: 0 28px 0 10px;
+
+    border-radius: 6px;
+    border: 1px solid var(--theia-border-color, #3c3c3c);
+
+    background-color: var(--theia-input-background, #2d2d2d);
+    color: var(--theia-input-foreground, #cccccc);
+
+    font-size: 13px;
+    line-height: 26px;
+
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    cursor: pointer;
+    position: relative;
+}
+
+/* Dropdown arrow (custom) */
+.smart-toolbar-dropdown {
+    background-image:
+        linear-gradient(45deg, transparent 50%, var(--theia-input-foreground, #ccc) 50%),
+        linear-gradient(135deg, var(--theia-input-foreground, #ccc) 50%, transparent 50%),
+        linear-gradient(to right, transparent, transparent);
+    background-position:
+        calc(100% - 16px) 11px,
+        calc(100% - 11px) 11px,
+        100% 0;
+    background-size:
+        5px 5px,
+        5px 5px,
+        2.5em 2.5em;
+    background-repeat: no-repeat;
+}
+
+/* Hover / focus */
+.smart-toolbar-dropdown:hover {
+    border-color: var(--theia-focusBorder, #007acc);
+}
+
+.smart-toolbar-dropdown:focus {
+    border-color: var(--theia-focusBorder, #007acc);
+    box-shadow: 0 0 0 1px var(--theia-focusBorder, #007acc);
+}
+
+/* Disabled */
+.smart-toolbar-dropdown:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ==============================
+   TOOLBAR BUTTONS
+   ============================== */
+
+.smart-toolbar-inline {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.theia-toolbar-button {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+    border: 1px solid transparent;
+
+    background: transparent;
+    color: var(--theia-icon-foreground, #cccccc);
+
+    cursor: pointer;
+}
+
+/* Hover */
+.theia-toolbar-button:hover:not(:disabled) {
+    background: var(--theia-toolbar-hoverBackground, rgba(255, 255, 255, 0.08));
+    border-color: var(--theia-border-color, #3c3c3c);
+}
+
+/* Active */
+.theia-toolbar-button:active:not(:disabled) {
+    background: var(--theia-toolbar-activeBackground, rgba(255, 255, 255, 0.12));
+}
+
+/* Disabled */
+.theia-toolbar-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ==============================
+   MORE BUTTON (ELLIPSIS)
+   ============================== */
+
+.smart-toolbar__more {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+    border: 1px solid transparent;
+
+    background: transparent;
+    color: var(--theia-icon-foreground, #cccccc);
+
+    margin-left: 4px;
+}
+
+/* Hover */
+.smart-toolbar__more:hover {
+    background: var(--theia-toolbar-hoverBackground, rgba(255, 255, 255, 0.08));
+    border-color: var(--theia-border-color, #3c3c3c);
+}
+
+/* Focus ring (keyboard accessibility) */
+.smart-toolbar__more:focus {
+    outline: none;
+    box-shadow: 0 0 0 1px var(--theia-focusBorder, #007acc);
+}
+
+.smart-toolbar-widget .theia-toolbar-button,
+.smart-toolbar__more {
+    color: var(--theia-icon-foreground, #c5c5c5);
+    border-color: var(--theia-border-color, #2a2a2a);
+}
+
+.smart-toolbar-widget .theia-toolbar-button:hover:not(:disabled),
+.smart-toolbar__more:hover {
+    background: var(--theia-toolbar-hoverBackground, rgba(255, 255, 255, 0.06));
+    border-color: var(--theia-focusBorder, #3c3c3c);
+    color: var(--theia-icon-activeForeground, #ffffff);
+}
+
+/* ==============================
+   COMPACT TOOLBAR BUTTON SIZE
+   ============================== */
+
+/* Toolbar icon buttons */
+.smart-toolbar-widget .theia-toolbar-button,
+.smart-toolbar__more {
+    width: 26px;
+    height: 26px;
+
+    min-width: 26px;
+    min-height: 26px;
+
+    padding: 0;
+    border-radius: 4px;
+    /* less rounded, more "toolbar-like" */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Icon size inside buttons */
+.smart-toolbar-widget .theia-toolbar-button .codicon,
+.smart-toolbar__more .codicon {
+    font-size: 14px;
+    line-height: 1;
+}
+
+/* Slightly tighter hover */
+.smart-toolbar-widget .theia-toolbar-button:hover:not(:disabled),
+.smart-toolbar__more:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Scoped override: only inside your widget */
+.smart-toolbar-widget .theia-button.theia-toolbar-button {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--theia-icon-foreground);
+}
+
+.smart-toolbar-widget .theia-button.theia-toolbar-button:hover:not(:disabled) {
+    background: var(--theia-toolbar-hoverBackground, rgba(255, 255, 255, 0.08));
+}
+
+.smart-toolbar-widget .theia-button.theia-toolbar-button .codicon {
+    color: var(--theia-icon-foreground);
+}

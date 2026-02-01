@@ -5,6 +5,8 @@ import { CommandContribution, MenuContribution } from '@theia/core';
 import { FrontendApplicationContribution } from '@theia/core/lib/browser';
 import { TargetStateStore } from './target-state-store';
 import { TargetDropdownBridge } from './target-dropdown-bridge';
+import { TargetIdProvider, TargetLabelProvider } from './target-providers';
+import { DropdownIdProvider, DropdownLabelProvider } from 'smart-toolbar/lib/browser/smart-toolbar-api';
 
 
 export default new ContainerModule(bind => {
@@ -17,7 +19,12 @@ export default new ContainerModule(bind => {
 
     bind(TargetStateStore).toSelf().inSingletonScope();
 
-    // bridge
     bind(TargetDropdownBridge).toSelf().inSingletonScope();
     bind(FrontendApplicationContribution).toService(TargetDropdownBridge);
+
+    bind(TargetIdProvider).toSelf().inSingletonScope();
+    bind(DropdownIdProvider).toService(TargetIdProvider);
+
+    bind(TargetLabelProvider).toSelf().inSingletonScope();
+    bind(DropdownLabelProvider).toService(TargetLabelProvider);
 });

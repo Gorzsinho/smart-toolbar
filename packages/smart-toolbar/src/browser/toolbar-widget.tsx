@@ -29,13 +29,13 @@ export function ToolbarWidget(props: Props): React.ReactElement {
     const [items, setItems] = React.useState<ToolbarItem[]>(() => collectItems(toolbarContributions));
     const [, forceRerender] = React.useReducer((x) => x + 1, 0);
 
-    // 1) Ha a contributions dinamikusan változhatnak nálad, akkor időnként / triggerre újragyűjtöd.
-    //    (Ha fix, ez elég initkor.)
+    // 1) If contributions can change dynamically in your setup, re-collect them periodically or on a trigger.
+    //    (If they are fixed, collecting them once at init is enough.)
     React.useEffect(() => {
         setItems(collectItems(toolbarContributions));
     }, [toolbarContributions]);
 
-    // 2) Parancs futás után UI frissítés (enabled/visible változhat)
+    // 2) Refresh the UI after a command is executed (enabled/visible state may change)
     React.useEffect(() => {
         const d = commandRegistry.onDidExecuteCommand(() => forceRerender());
         return () => d.dispose();
@@ -54,7 +54,7 @@ export function ToolbarWidget(props: Props): React.ReactElement {
                 return (
                     <button
                         key={`${item.commandId}-${idx}`}
-                        className={`theia-button theia-toolbar-button ${item.className ?? ''}`}
+                        className='theia-button theia-toolbar-button'
                         type="button"
                         title={item.tooltip ?? ''}
                         disabled={!enabled}

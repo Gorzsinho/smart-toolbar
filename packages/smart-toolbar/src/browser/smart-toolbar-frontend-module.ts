@@ -3,9 +3,9 @@ import { SmartToolbarWidget } from './smart-toolbar-widget';
 import { FrontendApplicationContribution, WidgetFactory } from '@theia/core/lib/browser';
 import { ToolbarContribution } from './toolbar-contribution';
 import { bindContributionProvider } from '@theia/core';
-import { DropdownService, SMART_TOOLBAR_ID } from './dropdown-api';
 import { DropdownServiceImpl } from './dropdown-service-impl';
 import { DropdownSelectionRefreshContribution } from './dropdown-selection-refresh-contribution';
+import { DropdownService, SMART_TOOLBAR_ID } from './smart-toolbar-api';
 
 
 export default new ContainerModule(bind => {

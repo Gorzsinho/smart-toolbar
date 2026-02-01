@@ -4,11 +4,12 @@ import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget'
 import { ToolbarWidget } from './toolbar-widget';
 import './style/smart-toolbar-widget.css';
 import { ContextMenuRenderer } from '@theia/core/lib/browser';
-import { SmartToolbarMenus } from './smart-toolbar-menus';
-import { DropdownService, SMART_TOOLBAR_ID } from './dropdown-api';
+import { DropdownIdProvider, DropdownLabelProvider, DropdownService, SMART_TOOLBAR_ID, SmartToolbarMenus } from './smart-toolbar-api';
 import { DropdownWidget } from './dropdown-widget';
 import { CommandRegistry, CommandService, ContributionProvider } from '@theia/core';
 import { ToolbarContribution } from './toolbar-contribution';
+import './style/smart-toolbar-theme.css';
+
 
 @injectable()
 export class SmartToolbarWidget extends ReactWidget {
@@ -29,14 +30,17 @@ export class SmartToolbarWidget extends ReactWidget {
     @inject(ContextMenuRenderer)
     protected readonly contextMenuRenderer: ContextMenuRenderer;
 
-    static readonly LABEL = 'Smart Toolbar'
+    @inject(DropdownIdProvider)
+    protected readonly dropdownIdProvider: DropdownIdProvider;
+
+    @inject(DropdownLabelProvider)
+    protected readonly dropdownLabelProvider: DropdownLabelProvider;
 
     private moreBtnRef: HTMLButtonElement | null = null;
 
     @postConstruct()
     protected init(): void {
         this.id = SMART_TOOLBAR_ID;
-        this.title.label = SmartToolbarWidget.LABEL;
         this.title.closable = false;
 
         this.addClass('theia-three-button-toolbar-widget');
@@ -50,7 +54,10 @@ export class SmartToolbarWidget extends ReactWidget {
             <div className="smart-toolbar-widget">
                 <div className="smart-toolbar-widget__content">
                     <div className="smart-toolbar-widget__left">
-                        <DropdownWidget service={this.dropdownService} />
+                        <DropdownWidget
+                            service={this.dropdownService}
+                            idProvider={this.dropdownIdProvider}
+                            labelProvider={this.dropdownLabelProvider} />
                     </div>
 
                     <div className="smart-toolbar-widget__right">
@@ -62,7 +69,7 @@ export class SmartToolbarWidget extends ReactWidget {
                     </div>
 
                     <button
-                        className="theia-button target-toolbar__more"
+                        className="theia-button theia-toolbar-button smart-toolbar__more"
                         type="button"
                         title="More actions"
                         ref={el => (this.moreBtnRef = el)}

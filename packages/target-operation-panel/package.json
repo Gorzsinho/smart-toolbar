@@ -14,13 +14,15 @@
   },
   "devDependencies": {
     "rimraf": "^5.0.0",
-    "typescript": "~5.4.5"
+    "typescript": "~5.4.5",
+    "cpx": "^1.5.0"
   },
   "scripts": {
     "prepare": "npm run clean && npm run build",
     "clean": "rimraf lib",
-    "build": "tsc",
-    "watch": "tsc -w"
+    "build": "tsc && yarn copy:resources",
+    "watch": "tsc -w",
+    "copy:resources": "cpx \"src/**/*.{css,svg,png,jpg,gif}\" lib"
   },
   "theiaExtensions": [
     {
