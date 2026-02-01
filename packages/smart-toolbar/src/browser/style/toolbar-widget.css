@@ -1,0 +1,116 @@
+.theia-three-button-toolbar-root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.theia-three-button-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    gap: 6px;
+    border-bottom: 1px solid var(--theia-ui-border-color0);
+    background: var(--theia-editor-background);
+}
+
+.theia-toolbar-button {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theia-toolbar-button .codicon {
+    font-size: 16px;
+}
+
+.theia-three-button-toolbar-content {
+    flex: 1;
+    padding: 10px;
+    overflow: auto;
+}
+
+.theia-three-button-toolbar-inline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Root row: gombok balra, "..." jobbra */
+.target-toolbar__row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+}
+
+/* Bal oldali toolbar gombcsoport */
+.target-toolbar__buttons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Közös gomb stílus */
+.target-toolbar__btn,
+.target-toolbar__more {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* Hover / focus - Theia theme színekhez igazítva */
+.target-toolbar__btn:hover:not(:disabled),
+.target-toolbar__more:hover:not(:disabled) {
+    background: var(--theia-button-hoverBackground);
+}
+
+.target-toolbar__btn:focus,
+.target-toolbar__more:focus {
+    outline: 1px solid var(--theia-focusBorder);
+    outline-offset: -1px;
+}
+
+/* Disabled állapot */
+.target-toolbar__btn:disabled,
+.target-toolbar__more:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+/* Codicon méret és szín */
+.target-toolbar__btn .codicon,
+.target-toolbar__more .codicon {
+    font-size: 16px;
+    color: var(--theia-foreground);
+}
+
+/* Opcionális: vizuális elválasztó a fő gombok és a "..." között */
+.target-toolbar__more {
+    margin-left: 6px;
+    position: relative;
+}
+
+.target-toolbar__more::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: var(--theia-ui-border-color0);
+}

@@ -1,0 +1,37 @@
+{
+  "name": "smart-toolbar-app",
+  "version": "0.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=18",
+    "npm": ">=8"
+  },
+  "workspaces": [
+    "browser-app",
+    "electron-app",
+    "packages/*"
+  ],
+  "dependencies": {
+    "@theia/core": "1.68.0"
+  },
+  "scripts": {
+    "build": "npm --prefix browser-app run bundle && npm --prefix electron-app run bundle",
+    "build:browser": "npm --prefix browser-app run bundle",
+    "build:electron": "npm --prefix electron-app run bundle",
+    "postinstall": "theia check:theia-version",
+    "start": "npm --prefix browser-app start",
+    "start:browser": "npm --prefix browser-app start",
+    "start:electron": "npm --prefix electron-app start",
+    "watch": "npm --prefix browser-app run watch && npm --prefix electron-app run watch"
+  },
+  "devDependencies": {
+    "lerna": "2.4.0"
+  },
+  "theia": {
+    "frontend": {
+      "config": {
+        "applicationName": "Smart Toolbar Example"
+      }
+    }
+  }
+}

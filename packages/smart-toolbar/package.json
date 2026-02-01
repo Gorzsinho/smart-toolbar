@@ -1,0 +1,31 @@
+{
+  "name": "smart-toolbar",
+  "keywords": [
+    "theia-extension"
+  ],
+  "version": "0.0.0",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "dependencies": {
+    "@theia/core": "1.68.0"
+  },
+  "devDependencies": {
+    "rimraf": "^5.0.0",
+    "typescript": "~5.4.5",
+    "cpx": "^1.5.0"
+  },
+  "scripts": {
+    "prepare": "npm run clean && npm run build",
+    "clean": "rimraf lib",
+    "build": "tsc && yarn copy:resources",
+    "watch": "tsc -w",
+    "copy:resources": "cpx \"src/**/*.{css,svg,png,jpg,gif}\" lib"
+  },
+  "theiaExtensions": [
+    {
+      "frontend": "lib/browser/smart-toolbar-frontend-module"
+    }
+  ]
+}
