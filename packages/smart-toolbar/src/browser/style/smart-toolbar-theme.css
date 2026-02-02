@@ -94,9 +94,7 @@
    ============================== */
 
 .smart-toolbar-inline {
-    display: flex;
-    align-items: center;
-    gap: 1px;
+    gap: 0 !important;
 }
 
 .theia-toolbar-button {
@@ -168,8 +166,30 @@
 
 .smart-toolbar-widget .theia-toolbar-button,
 .smart-toolbar__more {
-    color: var(--theia-icon-foreground, #c5c5c5);
-    border-color: var(--theia-border-color, #2a2a2a);
+    margin: 0 !important;
+}
+
+.smart-toolbar-widget .theia-toolbar-button {
+    border-radius: 0 !important;
+}
+
+.smart-toolbar-widget .theia-toolbar-button:first-child {
+    border-top-left-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
+}
+
+.smart-toolbar-widget .theia-toolbar-button:last-child,
+.smart-toolbar__more {
+    border-top-right-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+}
+
+.smart-toolbar-widget .theia-toolbar-button+.theia-toolbar-button {
+    margin-left: -1px;
+}
+
+.smart-toolbar-widget .theia-toolbar-button+.smart-toolbar__more {
+    margin-left: -1px;
 }
 
 .smart-toolbar-widget .theia-toolbar-button:hover:not(:disabled),
