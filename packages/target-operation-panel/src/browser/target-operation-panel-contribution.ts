@@ -9,12 +9,28 @@ import './style/strip-panel.css';
 
 const TargetCommands = {
     CONNECT: {
-        id: 'connection.connect',
+        id: 'connect',
         label: 'Connect'
     },
     DISCONNECT: {
-        id: 'connection.disconnect',
+        id: 'disconnect',
         label: 'Disconnect'
+    },
+    BUILD: {
+        id: 'build',
+        label: 'Build'
+    },
+    LOAD: {
+        id: 'load',
+        label: 'Load'
+    },
+    START: {
+        id: 'start',
+        label: 'Start'
+    },
+    MONITOR: {
+        id: 'monitor',
+        label: 'Monitor'
     },
     DO_SOMETHING: {
         id: 'otherext.doSomething',
@@ -99,9 +115,36 @@ export class TargetOperationPanelContribution implements CommandContribution, To
             isVisible: () => this.targetStateStore.isConnectedForCurrentTarget()
         });
 
+        registry.registerCommand(TargetCommands.BUILD, {
+            execute: () => {
+                console.log('Build executed');
+            },
+            isVisible: () => true,
+            isEnabled: () => false,
+        });
+
+        registry.registerCommand(TargetCommands.START, {
+            execute: () => {
+                console.log('Start executed');
+            }
+        });
+
+        registry.registerCommand(TargetCommands.MONITOR, {
+            execute: () => {
+                console.log('Monitor executed');
+            }
+
+        });
+
+        registry.registerCommand(TargetCommands.LOAD, {
+            execute: () => {
+                console.log('Load executed');
+            }
+        });
+
         registry.registerCommand(TargetCommands.DO_SOMETHING, {
             execute: () => {
-                console.log('Do something executed1');
+                console.log('Do something executed');
             }
         });
 
@@ -125,6 +168,34 @@ export class TargetOperationPanelContribution implements CommandContribution, To
             icon: 'debug-disconnect',
             tooltip: 'Disconnect',
             order: 20
+        });
+
+        registry.registerItem({
+            commandId: TargetCommands.BUILD.id,
+            icon: 'file-symlink-file',
+            tooltip: 'Build',
+            order: 30
+        });
+
+        registry.registerItem({
+            commandId: TargetCommands.LOAD.id,
+            icon: 'file',
+            tooltip: 'Load',
+            order: 40
+        });
+
+        registry.registerItem({
+            commandId: TargetCommands.START.id,
+            icon: 'play-circle',
+            tooltip: 'Start',
+            order: 50
+        });
+
+        registry.registerItem({
+            commandId: TargetCommands.MONITOR.id,
+            icon: 'pulse',
+            tooltip: 'Monitor',
+            order: 60
         });
     }
 

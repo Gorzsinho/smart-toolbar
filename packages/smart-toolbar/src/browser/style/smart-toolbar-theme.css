@@ -12,7 +12,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0px;
 }
 
 /* Left: dropdown */
@@ -25,7 +25,7 @@
 .smart-toolbar-widget__right {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 2px;
 }
 
 /* ==============================
@@ -96,7 +96,7 @@
 .smart-toolbar-inline {
     display: flex;
     align-items: center;
-    gap: 2px;
+    gap: 1px;
 }
 
 .theia-toolbar-button {
@@ -151,7 +151,7 @@
     background: transparent;
     color: var(--theia-icon-foreground, #cccccc);
 
-    margin-left: 4px;
+    margin-left: 2px;
 }
 
 /* Hover */
