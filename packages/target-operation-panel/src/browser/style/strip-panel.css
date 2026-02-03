@@ -10,9 +10,11 @@
     display: flex;
     align-items: center;
 
-    padding: 0 8px;
     box-sizing: border-box;
 
     background: var(--theia-editor-background, #1e1e1e);
     border-bottom: 1px solid var(--theia-border-color, #333);
+
+    padding-left: var(--smart-toolbar-left-offset, 8px);
+    padding-right: 8px;
 }

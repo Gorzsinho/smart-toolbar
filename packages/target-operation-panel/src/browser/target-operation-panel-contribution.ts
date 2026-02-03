@@ -51,6 +51,9 @@ export class TargetOperationPanelContribution implements CommandContribution, To
     @inject(TargetStateStore)
     protected readonly targetStateStore: TargetStateStore;
 
+    private tabRowObserver?: ResizeObserver;
+    private tabRowWaitInterval?: number;
+
     async onStart(app: FrontendApplication): Promise<void> {
         await this.addTargetOperationPanel(app.shell);
 
@@ -102,6 +105,47 @@ export class TargetOperationPanelContribution implements CommandContribution, To
         // 4) Refresh
         strip.update();
         shell.update();
+
+        // Wait until tab row is actually rendered
+        this.waitForTabRowAndObserve();
+    }
+
+    protected waitForTabRowAndObserve(): void {
+        console.log('[StripPanel] Waiting for tab row...');
+
+        // Try to find it periodically until it exists
+        this.tabRowWaitInterval = window.setInterval(() => {
+            const tabRow = document.querySelector('.theia-tabBar-tab-row') as HTMLElement | null;
+
+            if (!tabRow) {
+                return;
+            }
+
+            console.log('[StripPanel] Tab row found, attaching ResizeObserver');
+            window.clearInterval(this.tabRowWaitInterval);
+            this.tabRowWaitInterval = undefined;
+
+            // Observe size changes
+            this.tabRowObserver = new ResizeObserver(() => {
+                this.updateSmartToolbarLeftOffsetFromElement(tabRow);
+            });
+
+            this.tabRowObserver.observe(tabRow);
+
+            // Initial update
+            this.updateSmartToolbarLeftOffsetFromElement(tabRow);
+        }, 100);
+    }
+
+    protected updateSmartToolbarLeftOffsetFromElement(tabRow: HTMLElement): void {
+        const rect = tabRow.getBoundingClientRect();
+        const offsetPx = Math.max(0, Math.round(rect.width)) + 8;
+
+        console.log(`[StripPanel] Setting smart toolbar left offset to ${offsetPx}px`);
+        document.documentElement.style.setProperty(
+            '--smart-toolbar-left-offset',
+            `${offsetPx}px`
+        );
     }
 
     registerCommands(registry: CommandRegistry): void {
