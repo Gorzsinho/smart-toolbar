@@ -12,7 +12,8 @@
     "packages/*"
   ],
   "dependencies": {
-    "@theia/core": "1.68.0"
+    "@theia/core": "1.68.0",
+    "@theia/plugin-ext": "1.68.0"
   },
   "scripts": {
     "build": "npm --prefix browser-app run bundle && npm --prefix electron-app run bundle",
@@ -33,5 +34,8 @@
         "applicationName": "Smart Toolbar Example"
       }
     }
-  }
+  },
+  "theiaExtensions": [
+    "@theia/plugin-ext"
+  ]
 }

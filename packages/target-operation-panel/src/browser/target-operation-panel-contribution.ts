@@ -5,6 +5,8 @@ import { SmartToolbarMenus } from 'smart-toolbar/lib/browser/smart-toolbar-api';
 import { ApplicationShell, BoxLayout, FrontendApplication, Panel, Widget, WidgetManager } from '@theia/core/lib/browser';
 import { TargetStateStore } from './target-state-store';
 import { SMART_TOOLBAR_ID } from 'smart-toolbar/lib/browser/smart-toolbar-api';
+import { WebviewWidget } from '@theia/plugin-ext/lib/main/browser/webview/webview';
+import { WebviewWidgetFactory } from '@theia/plugin-ext/lib/main/browser/webview/webview-widget-factory';
 import './style/strip-panel.css';
 
 const TargetCommands = {
@@ -45,11 +47,17 @@ const TargetCommands = {
 @injectable()
 export class TargetOperationPanelContribution implements CommandContribution, ToolbarContribution, MenuContribution {
 
+    @inject(ApplicationShell)
+    protected readonly shell: ApplicationShell;
+
     @inject(WidgetManager)
     protected readonly widgetManager: WidgetManager;
 
     @inject(TargetStateStore)
     protected readonly targetStateStore: TargetStateStore;
+
+    @inject(WebviewWidgetFactory)
+    protected readonly webviewWidgetFactory: WebviewWidgetFactory;
 
     private tabRowObserver?: ResizeObserver;
     private tabRowWaitInterval?: number;
@@ -168,8 +176,29 @@ export class TargetOperationPanelContribution implements CommandContribution, To
         });
 
         registry.registerCommand(TargetCommands.START, {
-            execute: () => {
-                console.log('Start executed');
+            execute: async () => {
+                const widget: WebviewWidget = await this.webviewWidgetFactory.createWidget({
+                    id: 'hello-world-webview'
+                });
+
+                widget.title.label = 'Hello World';
+                widget.title.closable = true;
+
+                widget.setHTML(`
+                    <!DOCTYPE html>
+                    <html>
+                    <body style="display:flex;align-items:center;justify-content:center;height:100vh;font-size:32px;">
+                        Hello World!
+                    </body>
+                    </html>
+                `);
+
+                if (!widget.isAttached) {
+                    this.shell.addWidget(widget, { area: 'main' });
+                }
+
+                // ✅ fókusz/előrehozás
+                this.shell.activateWidget(widget.id);
             }
         });
 
